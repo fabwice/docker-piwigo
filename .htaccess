@@ -1,0 +1,49 @@
+<Files .htaccess>
+order allow,deny
+deny from all
+</Files>
+
+AddType application/x-httpd-php .phtml .pht .php
+AddType application/x-httpd-php-source .phps
+AddType application/x-httpd-php3 .php3
+AddType application/x-httpd-php3-preprocessed .php3p
+AddType application/x-httpd-php4 .php4
+AddType application/x-httpd-php5 .php5
+
+RewriteEngine on
+
+
+ErrorDocument  404  /index.php?/category/
+
+RewriteRule ^categorie-.*-([0-9]+)\.html$ /category.php?cat=$1 [L]
+RewriteRule ^photo-.*-([0-9a-zA-Z_]+)-([0-9]+)\.html$ /picture.php?cat=$1&image_id=$2 [L]
+
+# supress php errors
+php_flag display_startup_errors off
+php_flag display_errors off
+php_flag html_errors off
+php_value docref_root 0
+php_value docref_ext 0
+# enable PHP error logging 
+# prevent access to PHP error log
+<Files PHP_errors.log>
+ Order allow,deny
+ Deny from all
+ Satisfy All
+</Files>
+
+<IfModule mod_rewrite.c>
+## redirect <2.4 thumbnails hotlinks to i.php
+RewriteRule ^upload/(.*)/thumbnail/TN\-(.*)\.([a-z0-9]{3,4})$ i.php?/upload/$1/$2-th.$3 [L]
+RewriteRule ^galleries/(.*)/thumbnail/TN\-(.*)\.([a-z0-9]{3,4})$ i.php?/galleries/$1/$2-th.$3 [L]
+
+## redirect <2.4 high-def hotlinks to original file
+RewriteRule ^upload/(.*)/pwg_high/(.*)\.([a-z0-9]{3,4})$ upload/$1/$2.$3 [L]
+RewriteRule ^galleries/(.*)/pwg_high/(.*)\.([a-z0-9]{3,4})$ galleries/$1/$2.$3 [L]
+
+## redirect <2.4 low-def hotlinks to i.php
+RewriteCond %{HTTP_REFERER} !^http(s)?://(www\.)?photos\.fabwice\.com/.*$ [NC]
+RewriteRule ^upload/(.*)/(.*)\.([a-z0-9]{3,4})$ i.php?/upload/$1/$2-me.$3 [L]
+RewriteCond %{HTTP_REFERER} !^http(s)?://(www\.)?photos\.fabwice\.com/.*$ [NC]
+RewriteRule ^galleries(.*)/(.*)\.([a-z0-9]{3,4})$ i.php?/galleries/$1/$2-me.$3 [L]
+</IfModule>
