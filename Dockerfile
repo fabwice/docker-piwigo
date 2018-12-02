@@ -1,7 +1,7 @@
 # Image for Duniter releases on Linux.
 #
 # Building this image:
-#   docker build . -t fabwice/piwigo
+#   docker build . -t fabwice/docker-piwigo
 # https://piwigo.org/doc/doku.php?id=user_documentation:use:features:new:htaccess_and_hotlink_in_2.4
 
 FROM mathieuruellan/piwigo
